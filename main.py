@@ -177,6 +177,9 @@ def main():
         elif command == "add-address":
             print(add_address(args, book))
 
+        elif command == "delete":
+            print(delete(args, book))
+
         else:
             print("Invalid command.")
 
