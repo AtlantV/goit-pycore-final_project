@@ -15,7 +15,7 @@ def input_error(func):
         try:
             return func(*args, **kwargs)
         except ValueError:
-            return "Give me name and(or) phone (10 numbers) please."
+            return "Give me name and(or) phone (12 numbers) please."
         except KeyError:
             return "Contact not found."
         except IndexError:
@@ -109,13 +109,40 @@ def birthdays(args, book: AddressBook):
         f"{item['name']}: {item['congratulation_date']}" for item in result
     )
 
+@input_error
+def add_email(args, book: AddressBook):
+    name, email, *_ = args
+    record = book.find(name)
+    if record is None:
+        return "No such name in AddressBook."
+    record.add_email (email)
+    return f"Email for {name} added."
+
+@input_error
+def add_address(args, book: AddressBook):
+    name = args[0]
+    address = " ".join(args[1:])
+    record = book.find(name)
+    if record is None:
+        return "No such name in AddressBook."
+    record.add_address (address)
+    return f"Address for {name} added."
+
+@input_error
+def delete (args, book: AddressBook):
+    name = args[0]
+    record = book.find(name)
+    if record is None:
+        return "No such name in AddressBook."
+    book.delete(name)
+    return f"Record for {name} deleted."
 
 # ---- Головний цикл ----
 
 def main():
     book = load_data()
     print("Welcome to the assistant bot!")
-    print("Commands: add, change, phone, all, add-birthday, show-birthday, birthdays, exit/close")
+    print("Commands: add, change, phone, all, add-birthday, show-birthday, birthdays, add-email, add-address, delete, exit/close")
 
     while True:
         user_input = input("-> ").strip()
@@ -153,6 +180,15 @@ def main():
         elif command == "birthdays":
             days = input("Enter number of days: ").strip()
             print(birthdays([days], book))
+
+        elif command == "add-email":
+            print(add_email(args, book))
+        
+        elif command == "add-address":
+            print(add_address(args, book))
+
+        elif command == "delete":
+            print(delete(args, book))
 
         else:
             print("Invalid command.")
