@@ -133,7 +133,7 @@ def delete (args, book: AddressBook):
 def main():
     book = load_data()
     print("Welcome to the assistant bot!")
-    print("Commands: add, change, phone, all, add-birthday, show-birthday, birthdays, add-email, add-address, exit/close")
+    print("Commands: add, change, phone, all, add-birthday, show-birthday, birthdays, add-email, add-address, delete, exit/close")
 
     while True:
         user_input = input("-> ").strip()
