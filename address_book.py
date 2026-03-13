@@ -6,7 +6,7 @@ Address Book — моделі даних
 
 from collections import UserDict
 from datetime import datetime, timedelta
-
+import re
 
 class Field:
     """Базовий клас для полів запису."""
@@ -16,19 +16,16 @@ class Field:
     def __str__(self):
         return str(self.value)
 
-
 class Name(Field):
     """Клас для зберігання імені контакту. Обов'язкове поле."""
     pass
 
-
 class Phone(Field):
-    """Клас для зберігання номера телефону. Валідація: 10 цифр."""
+    """Клас для зберігання номера телефону. Валідація: 12 цифр."""
     def __init__(self, value):
-        if len(value) != 10 or not value.isdigit():
-            raise ValueError("Please insert 10 numbers")
+        if not re.match(r"^380\d{9}$", value):
+            raise ValueError("Please insert 12 numbers in format '380*' :")
         super().__init__(value)
-
 
 class Birthday(Field):
     """Клас для зберігання дня народження. Формат: DD.MM.YYYY"""
@@ -38,6 +35,41 @@ class Birthday(Field):
         except ValueError:
             raise ValueError("Invalid date format. Use DD.MM.YYYY")
 
+class Email(Field):
+    """Клас для зберігання email. Формат: *@*.*"""
+    def __init__(self, value):
+        if not re.match(r"^[\w.-]+@[\w.-]+\.\w{2,}$", value):  
+          raise ValueError("Invalid email")
+        super().__init__(value)
+
+class Address(Field):
+    """Клас для зберігання address. Формат: місто, вулиця, будинок, квартира (якщо є)"""
+    def __init__(self, value):
+        # Очікуємо рядок у форматі: "місто, вулиця, будинок, квартира (якщо є)"
+        parts = [p.strip() for p in value.split(",")]
+        
+        if len(parts) < 3: 
+            raise ValueError("Address must contain at least city, street and house number")
+
+        city, street, house = parts[0], parts[1], parts[2]
+        apartment = parts[3] if len(parts) == 4 else None
+
+        # Валідація: місто і вулиця — тільки букви та пробіли
+        if not re.match(r"^[А-ЯІЇЄҐа-яієїґA-Za-z\s-]+$", city):
+            raise ValueError("Invalid city name")
+        if not re.match(r"^[А-ЯІЇЄҐа-яієїґA-Za-z\s-]+$", street):
+            raise ValueError("Invalid street name")
+        if not re.match(r"^\d+[\w/\-]*$", house):
+            raise ValueError("Invalid house number")
+        if apartment and not apartment.isdigit():
+            raise ValueError("Apartment number must be digits")
+
+        # Форматування у стандартний вигляд
+        formatted = f"м. {city}, вул. {street}, буд. {house}"
+        if apartment:
+            formatted += f", кв. {apartment}"
+        super().__init__(formatted)
+
 
 class Record:
     """Клас для зберігання інформації про контакт."""
@@ -45,6 +77,8 @@ class Record:
         self.name = Name(name)
         self.phones = []
         self.birthday = None
+        self.email = None 
+        self.address = None
 
     def add_phone(self, phone_number):
         phone = Phone(phone_number)
@@ -71,8 +105,14 @@ class Record:
     def add_birthday(self, birthday):
         self.birthday = Birthday(birthday)
 
+    def add_email(self, email):
+        self.email = Email(email)
+    
+    def add_address(self, address):
+        self.address = Address(address)
+
     def __str__(self):
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
+        return f"Contact name: {self.name.value} Birth_date: {self.birthday.value.strftime('%d.%m.%Y') if self.birthday else 'N/A'} Phones: {'; '.join(p.value for p in self.phones)} Email: {self.email.value if self.email else 'N/A'} Address: {self.address.value if self.address else 'N/A'}"
 
 
 class AddressBook(UserDict):
