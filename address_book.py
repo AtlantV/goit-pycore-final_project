@@ -112,8 +112,18 @@ class Record:
         self.address = Address(address)
 
     def __str__(self):
-        return f"Contact name: {self.name.value} Birth_date: {self.birthday.value.strftime('%d.%m.%Y') if self.birthday else 'N/A'} Phones: {'; '.join(p.value for p in self.phones)} Email: {self.email.value if self.email else 'N/A'} Address: {self.address.value if self.address else 'N/A'}"
+    phones = '; '.join(p.value for p in self.phones)
+    birthday = self.birthday.value.strftime('%d.%m.%Y') if self.birthday else "N/A"
+    email = self.email.value if self.email else "N/A"
+    address = self.address.value if self.address else "N/A"
 
+    return (
+        f"Contact name: {self.name.value}, "
+        f"phones: {phones}, "
+        f"birthday: {birthday}, "
+        f"email: {email}, "
+        f"address: {address}"
+    )
 
 class AddressBook(UserDict):
     """Клас для зберігання записів та керування ними."""
@@ -128,27 +138,34 @@ class AddressBook(UserDict):
         if name in self.data:
             del self.data[name]
 
-    def get_upcoming_birthdays(self):
-        greet_list_of_dict = []
-        today_date = datetime.today().date()
+    def get_upcoming_birthdays(self, days):
+        upcoming_birthdays = []
+        today = datetime.today().date()
+        end_date = today + timedelta(days=days)
 
-        for user in self.data.values():
-            if user.birthday is None:
+        for record in self.data.values():
+            if record.birthday is None:
                 continue
-            birth_date = user.birthday.value.date()
-            birthday_this_year = birth_date.replace(year=today_date.year)
 
-            if birthday_this_year < today_date:
-                birthday_this_year = birthday_this_year.replace(year=today_date.year + 1)
+            birthday = record.birthday.value.date()
+            birthday_this_year = birthday.replace(year=today.year)
 
-            delta_days = (birthday_this_year - today_date).days
-            if 1 <= delta_days <= 7:
-                if birthday_this_year.weekday() == 5:
-                    birthday_this_year += timedelta(days=2)
-                elif birthday_this_year.weekday() == 6:
-                    birthday_this_year += timedelta(days=1)
-                greet_list_of_dict.append({
-                    "name": user.name.value,
-                    "congratulation_date": birthday_this_year.strftime("%d-%m-%Y")
+            if birthday_this_year < today:
+                birthday_this_year = birthday_this_year.replace(year=today.year + 1)
+
+            (record.name.value, birthday_this_year)
+
+            if today <= birthday_this_year <= end_date:
+                congratulation_date = birthday_this_year
+
+                if congratulation_date.weekday() == 5:
+                    congratulation_date += timedelta(days=2)
+                elif congratulation_date.weekday() == 6:
+                    congratulation_date += timedelta(days=1)
+
+                upcoming_birthdays.append({
+                    "name": record.name.value,
+                    "congratulation_date": congratulation_date.strftime("%d.%m.%Y")
                 })
-        return greet_list_of_dict
+
+        return upcoming_birthdays

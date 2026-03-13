@@ -95,10 +95,19 @@ def show_birthday(args, book: AddressBook):
 
 @input_error
 def birthdays(args, book: AddressBook):
-    result = book.get_upcoming_birthdays()
+    days = int(args[0])
+
+    if days < 0:
+        return "Number of days must be a positive integer."
+
+    result = book.get_upcoming_birthdays(days)
+
     if not result:
-        return "No upcoming birthdays."
-    return "\n".join(f"{item['name']}: {item['congratulation_date']}" for item in result)
+        return f"No birthdays in the next {days} days."
+
+    return "\n".join(
+        f"{item['name']}: {item['congratulation_date']}" for item in result
+    )
 
 @input_error
 def add_email(args, book: AddressBook):
@@ -169,7 +178,8 @@ def main():
             print(show_birthday(args, book))
 
         elif command == "birthdays":
-            print(birthdays(args, book))
+            days = input("Enter number of days: ").strip()
+            print(birthdays([days], book))
 
         elif command == "add-email":
             print(add_email(args, book))
