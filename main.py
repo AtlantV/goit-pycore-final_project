@@ -119,6 +119,14 @@ def add_address(args, book: AddressBook):
     record.add_address (address)
     return f"Address for {name} added."
 
+@input_error
+def delete (args, book: AddressBook):
+    name = args[0]
+    record = book.find(name)
+    if record is None:
+        return "No such name in AddressBook."
+    book.delete(name)
+    return f"Record for {name} deleted."
 
 # ---- Головний цикл ----
 
