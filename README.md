@@ -159,7 +159,6 @@ goit-pycore-final_project/
 ├── notes.py          # Моделі та логіка нотаток
 ├── storage.py        # Збереження/завантаження даних
 ├── setup.py          # Конфігурація для встановлення як пакету
-├── requirements.txt  # Залежності
 └── README.md         # Цей файл
 ```
 
