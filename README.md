@@ -140,7 +140,6 @@ goit-pycore-final_project/
 ├── address_book.py   # Моделі та логіка контактів
 ├── notes.py          # Моделі та логіка нотаток
 ├── storage.py        # Збереження/завантаження даних
-├── requirements.txt  # Залежності
 └── README.md         # Цей файл
 ```
 
