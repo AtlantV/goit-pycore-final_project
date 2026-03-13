@@ -112,18 +112,19 @@ class Record:
         self.address = Address(address)
 
     def __str__(self):
-    phones = '; '.join(p.value for p in self.phones)
-    birthday = self.birthday.value.strftime('%d.%m.%Y') if self.birthday else "N/A"
-    email = self.email.value if self.email else "N/A"
-    address = self.address.value if self.address else "N/A"
+        phones = '; '.join(p.value for p in self.phones)
+        birthday = self.birthday.value.strftime('%d.%m.%Y') if self.birthday else "N/A"
+        email = self.email.value if self.email else "N/A"
+        address = self.address.value if self.address else "N/A"
 
-    return (
-        f"Contact name: {self.name.value}, "
-        f"phones: {phones}, "
-        f"birthday: {birthday}, "
-        f"email: {email}, "
-        f"address: {address}"
-    )
+        return (
+            f"Contact name: {self.name.value}, "
+            f"phones: {phones}, "
+            f"birthday: {birthday}, "
+            f"email: {email}, "
+            f"address: {address}"
+        )
+
 
 class AddressBook(UserDict):
     """Клас для зберігання записів та керування ними."""
