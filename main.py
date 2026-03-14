@@ -16,7 +16,7 @@ def input_error(func):
         try:
             return func(*args, **kwargs)
         except ValueError:
-            return "Give me name and(or) phone (12 numbers) please."
+            return "Give me name and phone (12 numbers) please."
         except KeyError:
             return "Contact not found."
         except IndexError:
