@@ -112,12 +112,12 @@ class Record:
         self.address = Address(address)
 
     def __str__(self):
-    phones = '; '.join(p.value for p in self.phones)
-    birthday = self.birthday.value.strftime('%d.%m.%Y') if self.birthday else "N/A"
-    email = self.email.value if self.email else "N/A"
-    address = self.address.value if self.address else "N/A"
+        phones = '; '.join(p.value for p in self.phones)
+        birthday = self.birthday.value.strftime('%d.%m.%Y') if self.birthday else "N/A"
+        email = self.email.value if self.email else "N/A"
+        address = self.address.value if self.address else "N/A"
 
-    return (
+        return (
         f"Contact name: {self.name.value}, "
         f"phones: {phones}, "
         f"birthday: {birthday}, "
@@ -153,19 +153,10 @@ class AddressBook(UserDict):
             if birthday_this_year < today:
                 birthday_this_year = birthday_this_year.replace(year=today.year + 1)
 
-            (record.name.value, birthday_this_year)
-
             if today <= birthday_this_year <= end_date:
-                congratulation_date = birthday_this_year
-
-                if congratulation_date.weekday() == 5:
-                    congratulation_date += timedelta(days=2)
-                elif congratulation_date.weekday() == 6:
-                    congratulation_date += timedelta(days=1)
-
                 upcoming_birthdays.append({
                     "name": record.name.value,
-                    "congratulation_date": congratulation_date.strftime("%d.%m.%Y")
+                    "congratulation_date": birthday_this_year.strftime("%d.%m.%Y")
                 })
 
         return upcoming_birthdays
