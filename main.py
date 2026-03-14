@@ -70,8 +70,8 @@ def phone_username(args, book: AddressBook):
 def all_contacts(book: AddressBook):
     if not book:
         return "No records found."
-    return "\n".join(str(record) for record in book.values())
-
+    line = "─" * 35
+    return f"\n{line}\n" + f"\n{line}\n".join(str(record) for record in book.values())
 
 @input_error
 def add_birthday(args, book: AddressBook):

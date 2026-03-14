@@ -118,13 +118,12 @@ class Record:
         address = self.address.value if self.address else "N/A"
 
         return (
-            f"Contact name: {self.name.value}, "
-            f"phones: {phones}, "
-            f"birthday: {birthday}, "
-            f"email: {email}, "
-            f"address: {address}"
+            f"Name:     {self.name.value}\n"
+            f"Phones:   {phones}\n"
+            f"Birthday: {birthday}\n"
+            f"Email:    {email}\n"
+            f"Address:  {address}"
         )
-
 
 class AddressBook(UserDict):
     """Клас для зберігання записів та керування ними."""
