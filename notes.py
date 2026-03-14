@@ -6,7 +6,6 @@ Notes — моделі даних для нотаток
 
 from collections import UserDict
 from datetime import datetime
-import re
 
 
 class Tag:

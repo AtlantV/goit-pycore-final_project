@@ -50,23 +50,23 @@ personal-assistant
 ```
 hello              - Привіт
 help               - Показати довідку
-exit / close      - Вихід та збереження
+exit / close       - Вихід та збереження
 ```
 
 ### 📒 Контакти
 
 ```
 add <name> <phone>                              - Додати контакт
-change <name> <old_phone> <new_phone>          - Змінити телефон
+change <name> <old_phone> <new_phone>           - Змінити телефон
 phone <name>                                    - Показати контакт
 all                                             - Показати всі контакти
 delete <name>                                   - Видалити контакт
 
-add-birthday <name> <DD.MM.YYYY>               - Додати день народження
+add-birthday <name> <DD.MM.YYYY>                - Додати день народження
 show-birthday <name>                            - Показати день народження
 birthdays <days>                                - Дні народження на N днів
 add-email <name> <email>                        - Додати email
-add-address <name> <city>, <street>, <house>   - Додати адресу
+add-address <name> <city>, <street>, <house>    - Додати адресу
 ```
 
 ### 📝 Нотатки
@@ -253,52 +253,13 @@ MIT License
 **Team Lead:**  
 Вадим Білоус (@Вадим Б)
 
-**Developers:**  
+**Scrum master:**  
+Олена Піта (@Olena Pita)
 
-- Олена Піта (@Olena Pita)
+**Developers:**  
 - Сергій Марчук (@Serhii Marchuk)
 - Олександр Підмурняк (@Oleksandr Pidmurniak)
 
 ---
 
 **Дата завершення:** 13 березня 2026
-
-| Команда | Аргументи | Приклад | Опис |
-|---|---|---|---|
-| `add` | `ім'я телефон` | `add John 0991234567` | Додати контакт |
-| `change` | `ім'я старий_тел новий_тел` | `change John 0991234567 0671234567` | Змінити телефон |
-| `phone` | `ім'я` | `phone John` | Показати телефон контакту |
-| `all` | — | `all` | Показати всі контакти |
-| `add-birthday` | `ім'я дата` | `add-birthday John 01.01.1990` | Додати день народження |
-| `show-birthday` | `ім'я` | `show-birthday John` | Показати день народження |
-| `birthdays` | `кількість_днів` | `birthdays 7` | Контакти з ДН через N днів |
-
-> ⚠️ Телефон — рівно 10 цифр. Дата — формат DD.MM.YYYY
-
----
-
-## 📝 Нотатки
-
-| Команда | Аргументи | Приклад | Опис |
-|---|---|---|---|
-| `add-note` | `текст` | `add-note Купити каву` | Додати нотатку |
-| `find-note` | `ключове_слово` | `find-note кава` | Знайти нотатку |
-| `edit-note` | `id новий_текст` | `edit-note 1 Купити чай` | Редагувати нотатку |
-| `delete-note` | `id` | `delete-note 1` | Видалити нотатку |
-| `all-notes` | — | `all-notes` | Показати всі нотатки |
-| `add-tag` | `id тег` | `add-tag 1 робота` | Додати тег до нотатки |
-| `find-by-tag` | `тег` | `find-by-tag робота` | Знайти нотатки за тегом |
-
----
-
-## ⚙️ Інше
-
-| Команда | Опис |
-|---|---|
-| `hello` | Привітання |
-| `help` | Показати список команд |
-| `close` або `exit` | Зберегти дані і вийти |
-
----
-
-> 💾 Дані зберігаються автоматично при виході командою `close` або `exit`
