@@ -16,7 +16,7 @@ def input_error(func):
         try:
             return func(*args, **kwargs)
         except ValueError:
-            return "Give me name and phone (12 numbers) please."
+            return "Give me name and phone (12 numbers <380...>) please."
         except KeyError:
             return "Contact not found."
         except IndexError:
@@ -119,7 +119,6 @@ def add_email(args, book: AddressBook):
     record.add_email (email)
     return f"Email for {name} added."
 
-@input_error
 def add_address(args, book: AddressBook):
     name = args[0]
     address = " ".join(args[1:])
@@ -421,8 +420,6 @@ def main():
         except Exception as e:
             print(f"❌ Error: {str(e)}")
             continue
-
-
 
 if __name__ == "__main__":
     main()

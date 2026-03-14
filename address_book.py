@@ -49,7 +49,7 @@ class Address(Field):
         parts = [p.strip() for p in value.split(",")]
         
         if len(parts) < 3: 
-            raise ValueError("Address must contain at least city, street and house number")
+            raise ValueError("Address must contain at least <city, street, house number>")
 
         city, street, house = parts[0], parts[1], parts[2]
         apartment = parts[3] if len(parts) == 4 else None
