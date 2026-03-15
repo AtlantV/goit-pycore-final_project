@@ -8,6 +8,7 @@ from collections import UserDict
 from datetime import datetime, timedelta
 import re
 
+
 class Field:
     """Базовий клас для полів запису."""
     def __init__(self, value):
@@ -16,9 +17,11 @@ class Field:
     def __str__(self):
         return str(self.value)
 
+
 class Name(Field):
     """Клас для зберігання імені контакту. Обов'язкове поле."""
     pass
+
 
 class Phone(Field):
     """Клас для зберігання номера телефону. Валідація: 12 цифр."""
@@ -26,6 +29,7 @@ class Phone(Field):
         if not re.match(r"^380\d{9}$", value):
             raise ValueError("Please insert 12 numbers in format '380*' :")
         super().__init__(value)
+
 
 class Birthday(Field):
     """Клас для зберігання дня народження. Формат: DD.MM.YYYY"""
@@ -35,12 +39,14 @@ class Birthday(Field):
         except ValueError:
             raise ValueError("Invalid date format. Use DD.MM.YYYY")
 
+
 class Email(Field):
     """Клас для зберігання email. Формат: *@*.*"""
     def __init__(self, value):
         if not re.match(r"^[\w.-]+@[\w.-]+\.\w{2,}$", value):  
-          raise ValueError("Invalid email")
+            raise ValueError("Invalid email")
         super().__init__(value)
+
 
 class Address(Field):
     """Клас для зберігання address. Формат: місто, вулиця, будинок, квартира (якщо є)"""
@@ -93,7 +99,7 @@ class Record:
     def edit_phone(self, old_number, new_number):
         for phone in self.phones:
             if phone.value == old_number:
-                phone.value = new_number
+                phone.value = Phone(new_number).value  # ValueError якщо невалідний
                 break
 
     def find_phone(self, phone_number):
@@ -125,6 +131,7 @@ class Record:
             f"Address:  {address}"
         )
 
+
 class AddressBook(UserDict):
     """Клас для зберігання записів та керування ними."""
 
@@ -152,8 +159,6 @@ class AddressBook(UserDict):
 
             if birthday_this_year < today:
                 birthday_this_year = birthday_this_year.replace(year=today.year + 1)
-
-            (record.name.value, birthday_this_year)
 
             if today <= birthday_this_year <= end_date:
                 congratulation_date = birthday_this_year

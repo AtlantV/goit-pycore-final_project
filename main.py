@@ -7,16 +7,16 @@ Main — точка входу, CLI інтерфейс
 from address_book import AddressBook, Record
 from notes import NotesBook, Note
 from storage import save_data, load_data
+import functools
 
 
 # ---- Декоратор для обробки помилок ----
 
 def input_error(func):
+    @functools.wraps(func)
     def inner(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except ValueError:
-            return "Give me name and phone (12 numbers <380...>) please."
         except KeyError:
             return "Contact not found."
         except IndexError:
@@ -36,25 +36,42 @@ def parse_input(user_input):
 
 @input_error
 def add_contact(args, book: AddressBook):
-    name, phone, *_ = args
+    try:
+        name, phone, *_ = args
+    except ValueError:
+        return "Usage: add <name> <phone>"
+
     record = book.find(name)
     message = "Contact updated."
     if record is None:
         record = Record(name)
         book.add_record(record)
         message = "Contact added."
-    if phone:
+
+    try:
         record.add_phone(phone)
+    except ValueError as e:
+        return str(e)
+
     return message
 
 
 @input_error
 def change_contact(args, book: AddressBook):
-    name, old_number, new_number, *_ = args
+    try:
+        name, old_number, new_number, *_ = args
+    except ValueError:
+        return "Usage: change <name> <old_phone> <new_phone>"
+
     record = book.find(name)
     if record is None:
         return "No such name in AddressBook."
-    record.edit_phone(old_number, new_number)
+
+    try:
+        record.edit_phone(old_number, new_number)
+    except ValueError as e:
+        return str(e)
+
     return "Contact updated."
 
 
@@ -62,6 +79,7 @@ def change_contact(args, book: AddressBook):
 def phone_username(args, book: AddressBook):
     name = args[0]
     record = book.find(name)
+
     if record is None:
         return "No such name in AddressBook."
     return str(record)
@@ -73,13 +91,23 @@ def all_contacts(book: AddressBook):
     line = "─" * 35
     return f"\n{line}\n" + f"\n{line}\n".join(str(record) for record in book.values())
 
+
 @input_error
 def add_birthday(args, book: AddressBook):
-    name, birthday, *_ = args
+    try:
+        name, birthday, *_ = args
+    except ValueError:
+        return "Usage: add-birthday <name> <DD.MM.YYYY>"
+
     record = book.find(name)
     if record is None:
         return "No such name in AddressBook."
-    record.add_birthday(birthday)
+
+    try:
+        record.add_birthday(birthday)
+    except ValueError as e:
+        return str(e)  # "Invalid date format. Use DD.MM.YYYY"
+
     return f"Birthday for {name} added."
 
 
@@ -87,6 +115,7 @@ def add_birthday(args, book: AddressBook):
 def show_birthday(args, book: AddressBook):
     name = args[0]
     record = book.find(name)
+
     if record is None:
         return "No such name in AddressBook."
     if record.birthday is None:
@@ -96,13 +125,15 @@ def show_birthday(args, book: AddressBook):
 
 @input_error
 def birthdays(args, book: AddressBook):
-    days = int(args[0])
+    try:
+        days = int(args[0])
+    except ValueError:
+        return "Number of days must be a valid integer."
 
     if days < 0:
         return "Number of days must be a positive integer."
 
     result = book.get_upcoming_birthdays(days)
-
     if not result:
         return f"No birthdays in the next {days} days."
 
@@ -110,28 +141,51 @@ def birthdays(args, book: AddressBook):
         f"{item['name']}: {item['congratulation_date']}" for item in result
     )
 
+
 @input_error
 def add_email(args, book: AddressBook):
-    name, email, *_ = args
+    try:
+        name, email, *_ = args
+    except ValueError:
+        return "Usage: add-email <name> <email>"
+
     record = book.find(name)
     if record is None:
         return "No such name in AddressBook."
-    record.add_email (email)
+
+    try:
+        record.add_email(email)
+    except ValueError as e:
+        return str(e)  # "Invalid email"
+
     return f"Email for {name} added."
 
+
+@input_error
 def add_address(args, book: AddressBook):
+    if len(args) < 2:
+        return "Usage: add-address <name> <city, street, house[, apt]>"
+
     name = args[0]
     address = " ".join(args[1:])
+
     record = book.find(name)
     if record is None:
         return "No such name in AddressBook."
-    record.add_address (address)
+
+    try:
+        record.add_address(address)
+    except ValueError as e:
+        return str(e)
+
     return f"Address for {name} added."
 
+
 @input_error
-def delete (args, book: AddressBook):
+def delete(args, book: AddressBook):
     name = args[0]
     record = book.find(name)
+
     if record is None:
         return "No such name in AddressBook."
     book.delete(name)
@@ -284,7 +338,6 @@ def all_tags(notes_book: NotesBook):
     if not tags:
         return "No tags found."
     return "Available tags: " + ", ".join(tags)
-
 
 
 def main():
