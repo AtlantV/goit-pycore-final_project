@@ -8,6 +8,16 @@ from address_book import AddressBook, Record
 from notes import NotesBook, Note
 from storage import save_data, load_data
 import functools
+from difflib import get_close_matches
+
+
+# ---- Вгадування команд при неправильному введенні ----
+
+COMMANDS = ["add", "change", "phone", "all", "search", "delete",
+            "add-birthday", "show-birthday", "birthdays",
+            "add-email", "add-address", "add-note", "edit-note",
+            "delete-note", "search-note", "search-tag", "add-tag",
+            "remove-tag", "all-notes", "all-tags", "help", "exit"]
 
 
 # ---- Декоратор для обробки помилок ----
@@ -55,6 +65,7 @@ def add_contact(args, book: AddressBook):
 
     return message
 
+
 @input_error
 def search_contacts(args, book: AddressBook):
     if not args:
@@ -65,6 +76,7 @@ def search_contacts(args, book: AddressBook):
         return f"No contacts found for '{query}'."
     line = "─" * 35
     return f"\n{line}\n" + f"\n{line}\n".join(str(r) for r in results)
+
 
 @input_error
 def change_contact(args, book: AddressBook):
@@ -93,7 +105,6 @@ def phone_username(args, book: AddressBook):
     if record is None:
         return "No such name in AddressBook."
     return str(record)
-
 
 def all_contacts(book: AddressBook):
     if not book:
@@ -475,10 +486,14 @@ def main():
                 print(all_notes(notes_book))
 
             elif command == "all-tags":
-                print(all_tags(notes_book))
+                print(all_tags(notes_book))      
 
             else:
-                print("❌ Invalid command. Type 'help' for available commands.")
+                matches = get_close_matches(command, COMMANDS, n=1, cutoff=0.6)
+                if matches:
+                    print(f"❌ Invalid command. Did you mean: '{matches[0]}'?")
+                else:
+                    print("❌ Invalid command. Type 'help' for available commands.")
         
         except KeyboardInterrupt:
             print("\n\n✅ Data saved. Good bye!")
