@@ -248,15 +248,17 @@ MIT License
 
 ## 👨‍💻 Розробники
 
-**Team Lead:**  
-Вадим Білоус (@Вадим Б)
+**PyCore Team**
 
-**Scrum master:**  
-Олена Піта (@Olena Pita)
+  **Team Lead:**  
+    Вадим Білоус (@Вадим Б)
 
-**Developers:**  
-- Сергій Марчук (@Serhii Marchuk)
-- Олександр Підмурняк (@Oleksandr Pidmurniak)
+  **Scrum master:**  
+    Олена Піта (@Olena Pita)
+
+  **Developers:**  
+    - Сергій Марчук (@Serhii Marchuk)
+    - Олександр Підмурняк (@Oleksandr Pidmurniak)
 
 ---
 
