@@ -55,6 +55,16 @@ def add_contact(args, book: AddressBook):
 
     return message
 
+@input_error
+def search_contacts(args, book: AddressBook):
+    if not args:
+        return "Specify search query."
+    query = " ".join(args)
+    results = book.search(query)
+    if not results:
+        return f"No contacts found for '{query}'."
+    line = "─" * 35
+    return f"\n{line}\n" + f"\n{line}\n".join(str(r) for r in results)
 
 @input_error
 def change_contact(args, book: AddressBook):
@@ -382,6 +392,7 @@ def main():
                 print("  add-email <name> <email>         - Add email")
                 print("  add-address <name> <address>     - Add address")
                 print("  delete <name>                    - Delete contact")
+                print("  search <query>                   - Search contacts")
                 print("\n" + "=" * 70)
                 print("📝 NOTE COMMANDS:")
                 print("=" * 70)
@@ -434,6 +445,9 @@ def main():
 
             elif command == "delete":
                 print(delete(args, book))
+            
+            elif command == "search":
+                print(search_contacts(args, book))
 
             # ---- Notes Commands ----
             elif command == "add-note":
