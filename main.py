@@ -367,7 +367,7 @@ def main():
     print("🤖 Welcome to Personal Assistant CLI!")
     print("=" * 70)
     print("\n📒 CONTACTS: add, change, phone, all, add-birthday, show-birthday,")
-    print("            birthdays, add-email, add-address, delete")
+    print("            birthdays, add-email, add-address, delete, search")
     print("\n📝 NOTES:    add-note, edit-note, delete-note, search-note,")
     print("            search-tag, add-tag, remove-tag, all-notes, all-tags")
     print("\n🔧 OTHER:    help, hello, exit/close")
