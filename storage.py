@@ -9,8 +9,7 @@ from pathlib import Path
 from address_book import AddressBook
 from notes import NotesBook
 
-DATA_DIR = Path.home() / ".personal_assistant"
-DATA_DIR.mkdir(exist_ok=True)
+DATA_DIR = Path.home()
 
 BOOK_FILE = DATA_DIR / "addressbook.pkl"
 NOTES_FILE = DATA_DIR / "notesbook.pkl"
